@@ -1,0 +1,220 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+// ==================== 공통 ====================
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  notebooks Notebook[]
+  notes     Note[]
+  projects  Project[]
+  tasks     Task[]
+  events    Event[]
+  bookmarks Bookmark[]
+  tags      Tag[]
+  chats     Chat[]
+}
+
+model Tag {
+  id     String  @id @default(uuid())
+  name   String
+  color  String?
+  userId String
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes     Note[]     @relation("NoteToTag")
+  tasks     Task[]     @relation("TaskToTag")
+  bookmarks Bookmark[] @relation("BookmarkToTag")
+
+  @@unique([name, userId])
+}
+
+// ==================== 지식 베이스 ====================
+
+model Notebook {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sources Source[]
+  notes   Note[]
+  chats   Chat[]
+}
+
+enum SourceType {
+  PDF
+  TXT
+  URL
+  YOUTUBE
+}
+
+enum SourceStatus {
+  PENDING
+  PROCESSING
+  READY
+  ERROR
+}
+
+model Source {
+  id         String       @id @default(uuid())
+  notebookId String
+  type       SourceType
+  title      String
+  url        String?
+  filePath   String?
+  content    String?      @db.Text
+  status     SourceStatus @default(PENDING)
+  errorMsg   String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  notebook Notebook @relation(fields: [notebookId], references: [id], onDelete: Cascade)
+  chunks   Chunk[]
+}
+
+model Chunk {
+  id        String                    @id @default(uuid())
+  sourceId  String
+  content   String                    @db.Text
+  embedding Unsupported("vector(1536)")?
+  index     Int
+  createdAt DateTime                  @default(now())
+
+  source Source @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId])
+}
+
+model Chat {
+  id         String   @id @default(uuid())
+  notebookId String
+  userId     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  notebook Notebook  @relation(fields: [notebookId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+model Message {
+  id        String      @id @default(uuid())
+  chatId    String
+  role      MessageRole
+  content   String      @db.Text
+  citations Json?
+  createdAt DateTime    @default(now())
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
+// ==================== 노트 ====================
+
+model Note {
+  id            String   @id @default(uuid())
+  title         String
+  content       String   @db.Text @default("")
+  notebookId    String?
+  userId        String
+  isAiGenerated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notebook Notebook? @relation(fields: [notebookId], references: [id], onDelete: SetNull)
+  tags     Tag[]     @relation("NoteToTag")
+}
+
+// ==================== 태스크 ====================
+
+model Project {
+  id        String   @id @default(uuid())
+  name      String
+  color     String?
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks Task[]
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  dueDate     DateTime?
+  projectId   String?
+  userId      String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  tags    Tag[]    @relation("TaskToTag")
+}
+
+// ==================== 캘린더 ====================
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  startAt     DateTime
+  endAt       DateTime
+  allDay      Boolean  @default(false)
+  color       String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== 북마크 ====================
+
+model Bookmark {
+  id          String   @id @default(uuid())
+  url         String
+  title       String
+  description String?  @db.Text
+  aiSummary   String?  @db.Text
+  favicon     String?
+  isRead      Boolean  @default(false)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags Tag[] @relation("BookmarkToTag")
+}
