@@ -139,6 +139,42 @@ User
 - `Message.citations`: `Json` — stores AI citation info
 - `Source.status`: `PENDING → PROCESSING → READY | ERROR`
 
+## Document Versioning
+
+### Version Format
+
+- Format: `MAJOR.MINOR` (e.g., `1.0`, `1.2`)
+- Stored in the metadata section at the bottom of each document
+- English: `- Version: X.Y`
+- Korean: `- 버전: X.Y`
+
+### Document Pairs
+
+| English | Korean |
+|---------|--------|
+| `README.md` | `README_ko.md` |
+| `CLAUDE.md` | `CLAUDE_ko.md` |
+
+### Rules
+
+| Action | Version Change |
+|--------|---------------|
+| Content change (default) | Increment MINOR (e.g., `1.0` → `1.1`) |
+| Major restructure (explicit request) | Increment MAJOR (e.g., `1.0` → `2.0`) |
+| After sync | Both documents carry the **source** version |
+
+- **Glossary**: Use `docs/TRANSLATION_GLOSSARY.md` for consistent EN↔KR term mapping (if it exists).
+
+### Version Update Prompt
+
+When you modify any document listed in the Document Pairs table above, always ask the user before finishing:
+
+1. Whether to increment the version (and confirm minor vs major)
+2. Whether to sync the counterpart document (EN↔KR) to reflect the same changes
+3. Whether to commit the changes
+
+Do **NOT** silently update versions or sync documents — always confirm with the user first.
+
 ## Key File Locations
 
 | File | Purpose |
