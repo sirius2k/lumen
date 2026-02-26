@@ -1,123 +1,97 @@
-# ◈ Lumen - Your Personal Knowledge Hub
+[English](./README.md) | [한국어](./README_ko.md)
 
-AI 기반 개인 지식관리 포털. NotebookLM의 RAG 채팅 기능을 핵심으로 태스크, 캘린더, 북마크, 대시보드까지 통합.
+# ◈ Lumen — Your Personal Knowledge Hub
 
-## 기술 스택
+AI-powered personal knowledge management portal. RAG-based AI chat (NotebookLM-style) at its core, integrated with tasks, calendar, bookmarks, notes, and a daily briefing dashboard.
 
-| 영역 | 기술 |
-|------|------|
-| 프론트엔드 | Next.js 15 (App Router) + TypeScript |
-| 백엔드 | NestJS + TypeScript |
+## Tech Stack
+
+| Area | Technology |
+|------|-----------|
+| Frontend | Next.js 15 (App Router) + TypeScript |
+| Backend | NestJS + TypeScript |
 | UI | Tailwind CSS + shadcn/ui |
 | DB | PostgreSQL + pgvector (Docker) |
 | ORM | Prisma |
 | AI | Claude claude-sonnet-4-6 (Anthropic SDK) |
-| 임베딩 | text-embedding-3-small (OpenAI) |
-| 인증 | NestJS Passport + JWT |
-| 모노레포 | pnpm workspaces + Turborepo |
+| Embeddings | text-embedding-3-small (OpenAI) |
+| Auth | NestJS Passport + JWT |
+| Monorepo | pnpm workspaces + Turborepo |
 
-## 빠른 시작
+## Quick Start
 
-### 1. 환경 변수 설정
+### 1. Set Up Environment Variables
 
-```bash
-# apps/api/.env 생성 (예시에서 복사)
-cp apps/api/.env.example apps/api/.env
-
-# 필수: 실제 API 키 입력
-# ANTHROPIC_API_KEY=sk-ant-...
-# OPENAI_API_KEY=sk-...
-
-# apps/web/.env.local 생성
-cp apps/web/.env.local.example apps/web/.env.local
+**`apps/api/.env`** (required):
+```
+DATABASE_URL=postgresql://lumen:lumen_secret@localhost:5433/lumen_db
+JWT_SECRET=your-jwt-secret
+JWT_REFRESH_SECRET=your-refresh-secret
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+PORT=3051
+UPLOAD_DIR=./uploads
 ```
 
-### 2. 의존성 설치
+**`apps/web/.env.local`** (required):
+```
+NEXT_PUBLIC_API_URL=http://localhost:3051/api
+NEXT_PUBLIC_DEV_BYPASS_AUTH=true
+NEXT_PUBLIC_DEV_EMAIL=your@email.com
+NEXT_PUBLIC_DEV_PASSWORD=yourpassword
+```
+
+### 2. Start Services
 
 ```bash
+# Start PostgreSQL container (port 5433)
+pnpm docker:up
+
+# Install dependencies
 pnpm install
-```
 
-### 3. Docker PostgreSQL 실행
+# Push DB schema
+pnpm db:push
 
-```bash
-docker compose up -d
-```
-
-### 4. DB 테이블 생성
-
-```bash
-cd apps/api && npx prisma db push --schema=./prisma/schema.prisma
-```
-
-### 5. 앱 실행
-
-```bash
+# Start all dev servers (web :3050 + api :3051)
 pnpm dev
 ```
 
-- **프론트엔드**: http://localhost:3050
-- **백엔드 API**: http://localhost:3051/api
+Open [http://localhost:3050](http://localhost:3050) in your browser.
 
-## 주요 기능
+## Features
 
-### 🧠 지식 베이스 (NotebookLM)
-- PDF/TXT 파일 업로드 → 자동 청크 분할 → pgvector 임베딩
-- URL 추가 → cheerio 웹 스크래핑 → 임베딩
-- RAG 기반 AI 채팅 (SSE 스트리밍 + 인용 표시)
+- **Knowledge Base** — Upload PDFs/URLs, ask questions via RAG-powered AI chat with citations
+- **Notes** — Markdown note editor, linked to notebooks
+- **Tasks** — Project-based task management with filters
+- **Calendar** — Monthly event view with inline creation
+- **Bookmarks** — Save URLs with automatic AI summaries (Claude Haiku)
+- **Dashboard** — Daily briefing, today's tasks, recent notes
+- **i18n** — English / Korean UI toggle
+- **Themes** — 5 color themes × light/dark mode (persisted in localStorage)
 
-### ✅ 태스크 관리
-- 프로젝트별 태스크 그룹화
-- 상태 관리 (TODO / IN_PROGRESS / DONE)
-- 마감일 설정 및 오늘 할일 필터
-
-### 📅 캘린더
-- 월간 달력 뷰
-- 이벤트 생성/관리
-
-### 🔖 북마크
-- URL 저장 → Claude Haiku AI 자동 요약
-- 읽음/미읽음 상태 관리
-- 태그 분류
-
-### 🏠 홈 대시보드
-- 오늘 할일 위젯
-- 최근 노트 위젯
-- AI Daily Briefing (Claude Haiku)
-
-### 📝 노트
-- 마크다운 에디터
-- 노트북 연결 지원
-- 태그 분류
-
-## 프로젝트 구조
+## Project Structure
 
 ```
 my-notebook-lm/
 ├── apps/
-│   ├── web/          # Next.js 15 (포트 3050)
-│   └── api/          # NestJS (포트 3051)
+│   ├── api/          # NestJS backend (:3051)
+│   └── web/          # Next.js 15 frontend (:3050)
 ├── packages/
-│   └── shared/       # 공유 타입 & DTO
-├── prisma/           # 원본 스키마 (참조용)
-├── docker-compose.yml
-├── turbo.json
-└── pnpm-workspace.yaml
+│   └── shared/       # Shared types & DTOs
+└── prisma/           # Schema reference
 ```
 
-## API 엔드포인트
+## Available Scripts
 
-```
-POST /api/auth/register|login|refresh
-GET|POST|PATCH|DELETE /api/notebooks
-POST /api/notebooks/:id/sources/file|url
-POST /api/notebooks/:id/chat  (SSE)
-GET|POST|PATCH|DELETE /api/notes
-GET|POST|PATCH|DELETE /api/tasks
-GET|POST|PATCH|DELETE /api/projects
-GET|POST|PATCH|DELETE /api/events
-GET|POST|PATCH|DELETE /api/bookmarks
-GET|POST|DELETE /api/tags
-POST /api/ai/briefing
-GET /api/ai/search
+```bash
+pnpm dev              # Start all dev servers
+pnpm docker:up        # Start PostgreSQL container
+pnpm db:generate      # Regenerate Prisma client
+pnpm db:push          # Push schema to DB (dev)
+pnpm db:migrate       # Create and apply migration (prod)
+pnpm --filter @lumen/api lint
+pnpm --filter @lumen/web lint
 ```

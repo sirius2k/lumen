@@ -1,0 +1,181 @@
+{
+  "common": {
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Delete",
+    "open": "Open",
+    "search": "Search",
+    "viewAll": "View all →",
+    "loading": "Loading...",
+    "noContent": "No content"
+  },
+  "sidebar": {
+    "home": "Home",
+    "knowledge": "Knowledge",
+    "notes": "Notes",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "bookmarks": "Bookmarks",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "topbar": {
+    "searchPlaceholder": "Search everything...",
+    "askAI": "Ask AI",
+    "quickCapture": "Quick Capture"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "themes": {
+      "default": "Default",
+      "ocean": "Ocean",
+      "forest": "Forest",
+      "amber": "Amber",
+      "rose": "Rose"
+    }
+  },
+  "dashboard": {
+    "greeting": "Hello, {name} 👋",
+    "todayTasks": "Today's Tasks",
+    "noTodayTasks": "No tasks due today.",
+    "recentNotes": "Recent Notes",
+    "noNotes": "No notes yet.",
+    "briefingTitle": "AI Daily Briefing",
+    "briefingLoading": "Generating briefing...",
+    "briefingEmpty": "Click to generate a briefing.",
+    "knowledge": "Knowledge Base",
+    "knowledgeDesc": "Notebooks & AI Chat",
+    "tasks": "Tasks",
+    "tasksDesc": "Task management",
+    "calendar": "Calendar",
+    "calendarDesc": "Schedule management",
+    "bookmarks": "Bookmarks",
+    "bookmarksDesc": "URL saving & AI summary"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "filterAll": "All",
+    "filterToday": "Today",
+    "filterTodo": "Todo",
+    "filterDone": "Done",
+    "addPlaceholder": "Add new task...",
+    "noProject": "No project",
+    "addButton": "Add",
+    "empty": "No tasks",
+    "emptyHint": "Add a new task above",
+    "inProgress": "In Progress"
+  },
+  "notes": {
+    "title": "Notes",
+    "newNote": "New Note",
+    "empty": "No notes",
+    "titlePlaceholder": "Note title...",
+    "contentPlaceholder": "Write in markdown...",
+    "selectHint": "Select a note or create one",
+    "noContent": "No content"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "today": "Today",
+    "weekDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "moreEvents": "+{count} more",
+    "addEventTitle": "Add event · {date}",
+    "eventPlaceholder": "Event title...",
+    "cancel": "Cancel",
+    "add": "Add"
+  },
+  "bookmarks": {
+    "title": "Bookmarks",
+    "addUrl": "Add URL",
+    "filterAll": "All",
+    "filterUnread": "Unread",
+    "urlPlaceholder": "https://...",
+    "aiSummarizing": "Summarizing...",
+    "add": "Add",
+    "cancel": "Cancel",
+    "empty": "No bookmarks saved",
+    "emptyHint": "Add a URL and AI will summarize it for you",
+    "markRead": "Read ✓",
+    "markUnread": "Unread"
+  },
+  "knowledge": {
+    "title": "Knowledge Base",
+    "subtitle": "Upload documents and chat with AI",
+    "newNotebook": "New Notebook",
+    "notebookPlaceholder": "Notebook title...",
+    "create": "Create",
+    "cancel": "Cancel",
+    "empty": "No notebooks",
+    "emptyHint": "Create your first notebook to analyze documents",
+    "createFirst": "Create Notebook",
+    "sources": "{count} sources",
+    "open": "Open →",
+    "uploadFile": "Upload File (PDF/TXT)",
+    "addUrl": "Add URL",
+    "urlPlaceholder": "Enter URL...",
+    "sourcesCount": "Sources ({count})",
+    "statusReady": "Ready",
+    "statusProcessing": "Processing",
+    "statusError": "Error",
+    "statusPending": "Pending",
+    "aiChat": "AI Chat",
+    "aiChatDesc": "Ask questions based on source documents",
+    "chatEmpty": "Add sources and ask AI questions",
+    "chatEmptyHint": "Upload PDFs, web pages, etc. for AI to analyze",
+    "chatPlaceholder": "Ask about your sources...",
+    "references": "References"
+  },
+  "auth": {
+    "login": {
+      "eyebrow": "Welcome back",
+      "title": "Sign In",
+      "subtitle": "Enter your email and password to continue.",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Your password",
+      "submit": "Sign In",
+      "loading": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "register": "Sign up",
+      "devDivider": "Dev environment",
+      "devLogin": "⚡ Quick Dev Login",
+      "errorDefault": "Invalid email or password."
+    },
+    "register": {
+      "eyebrow": "Get started",
+      "title": "Create Account",
+      "subtitle": "Build your personal knowledge hub with Lumen.",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "submit": "Create Account",
+      "loading": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in",
+      "errorDefault": "Registration failed. Please try again."
+    },
+    "brand": {
+      "loginHeadline1": "Think deeper.",
+      "loginHeadline2": "Know better.",
+      "loginDescription": "Connect documents and ideas, discover insights with AI — your personal knowledge hub.",
+      "loginFeatures": [
+        "RAG-powered AI chat on your documents",
+        "Notes, tasks, calendar & bookmarks in one place",
+        "AI bookmark summaries",
+        "Start each day with a Daily Briefing"
+      ],
+      "registerHeadline1": "Your knowledge,",
+      "registerHeadline2": "amplified.",
+      "registerDescription": "Upload documents, chat with AI, and manage your ideas in one organized space."
+    }
+  }
+}

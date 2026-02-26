@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import { authApi } from '@/lib/api/client';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/i18n/i18n.context';
 
 const IS_DEV =
   process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === 'true' &&
@@ -14,6 +15,7 @@ const IS_DEV =
 export default function LoginPage() {
   const router = useRouter();
   const { setAuth } = useAuthStore();
+  const { t, tArray } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +30,7 @@ export default function LoginPage() {
       setAuth(data);
       router.push('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || '이메일 또는 비밀번호를 확인해주세요.');
+      setError(err.response?.data?.message || t('auth.login.errorDefault'));
     } finally {
       setIsLoading(false);
     }
@@ -45,11 +47,13 @@ export default function LoginPage() {
       setAuth(data);
       router.push('/');
     } catch (err: any) {
-      setError('개발 계정 로그인 실패 — .env.local 확인 필요');
+      setError('Dev login failed — check .env.local');
     } finally {
       setIsLoading(false);
     }
   };
+
+  const features = tArray('auth.brand.loginFeatures');
 
   return (
     <>
@@ -462,20 +466,14 @@ export default function LoginPage() {
 
             <div className="brand-center">
               <h1 className="brand-headline">
-                Think deeper.<br />
-                <em>Know better.</em>
+                {t('auth.brand.loginHeadline1')}<br />
+                <em>{t('auth.brand.loginHeadline2')}</em>
               </h1>
               <p className="brand-description">
-                문서와 아이디어를 연결하고, AI와 함께 통찰을 발견하는
-                나만의 지식 허브.
+                {t('auth.brand.loginDescription')}
               </p>
               <div className="brand-features">
-                {[
-                  'RAG 기반 AI 채팅 — 문서 속 답을 바로',
-                  '노트, 태스크, 캘린더 한 곳에',
-                  '북마크 AI 자동 요약',
-                  'Daily Briefing으로 하루 시작',
-                ].map((f) => (
+                {features.map((f) => (
                   <div key={f} className="brand-feature">
                     <div className="brand-feature-dot" />
                     {f}
@@ -490,20 +488,18 @@ export default function LoginPage() {
           {/* ── 폼 패널 ── */}
           <div className="form-panel">
             <div className="form-container">
-              <p className="form-eyebrow">Welcome back</p>
-              <h2 className="form-title">로그인</h2>
-              <p className="form-subtitle">
-                계속하려면 이메일과 비밀번호를 입력하세요.
-              </p>
+              <p className="form-eyebrow">{t('auth.login.eyebrow')}</p>
+              <h2 className="form-title">{t('auth.login.title')}</h2>
+              <p className="form-subtitle">{t('auth.login.subtitle')}</p>
 
               <form onSubmit={handleLogin}>
                 <div className="field-group">
                   <div className="field">
-                    <label className="field-label">이메일</label>
+                    <label className="field-label">{t('auth.login.email')}</label>
                     <input
                       className="field-input"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder={t('auth.login.emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -511,7 +507,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <div className="field">
-                    <label className="field-label">비밀번호</label>
+                    <label className="field-label">{t('auth.login.password')}</label>
                     <input
                       className="field-input"
                       type="password"
@@ -530,10 +526,10 @@ export default function LoginPage() {
                   {isLoading ? (
                     <>
                       <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
-                      로그인 중...
+                      {t('auth.login.loading')}
                     </>
                   ) : (
-                    '로그인'
+                    t('auth.login.submit')
                   )}
                 </button>
               </form>
@@ -541,7 +537,7 @@ export default function LoginPage() {
               {IS_DEV && (
                 <>
                   <div className="dev-divider">
-                    <span className="dev-divider-label">개발 환경</span>
+                    <span className="dev-divider-label">{t('auth.login.devDivider')}</span>
                   </div>
                   <button
                     type="button"
@@ -554,14 +550,14 @@ export default function LoginPage() {
                     ) : (
                       '⚡'
                     )}
-                    개발 계정으로 바로 로그인
+                    {t('auth.login.devLogin').replace('⚡ ', '')}
                   </button>
                 </>
               )}
 
               <div className="form-footer">
-                계정이 없으신가요?{' '}
-                <Link href="/register">회원가입</Link>
+                {t('auth.login.noAccount')}{' '}
+                <Link href="/register">{t('auth.login.register')}</Link>
               </div>
             </div>
           </div>

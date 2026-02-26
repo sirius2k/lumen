@@ -15,20 +15,22 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
-
-const navItems = [
-  { href: '/', icon: Home, label: '홈' },
-  { href: '/knowledge', icon: Brain, label: '지식' },
-  { href: '/notes', icon: FileText, label: '노트' },
-  { href: '/tasks', icon: CheckSquare, label: '태스크' },
-  { href: '/calendar', icon: Calendar, label: '캘린더' },
-  { href: '/bookmarks', icon: Bookmark, label: '북마크' },
-];
+import { useI18n } from '@/i18n/i18n.context';
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, clearAuth } = useAuthStore();
+  const { t } = useI18n();
+
+  const navItems = [
+    { href: '/', icon: Home, label: t('sidebar.home') },
+    { href: '/knowledge', icon: Brain, label: t('sidebar.knowledge') },
+    { href: '/notes', icon: FileText, label: t('sidebar.notes') },
+    { href: '/tasks', icon: CheckSquare, label: t('sidebar.tasks') },
+    { href: '/calendar', icon: Calendar, label: t('sidebar.calendar') },
+    { href: '/bookmarks', icon: Bookmark, label: t('sidebar.bookmarks') },
+  ];
 
   const handleLogout = () => {
     clearAuth();
@@ -73,14 +75,14 @@ export function Sidebar() {
           className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
         >
           <Settings className="h-4 w-4" />
-          설정
+          {t('sidebar.settings')}
         </Link>
         <button
           onClick={handleLogout}
           className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
         >
           <LogOut className="h-4 w-4" />
-          로그아웃
+          {t('sidebar.logout')}
         </button>
       </div>
 

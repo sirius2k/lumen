@@ -74,3 +74,89 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Color Themes ── */
+/* Each theme overrides: --primary, --primary-foreground, --ring, --sidebar-primary, --sidebar-ring */
+
+[data-theme="default"] {
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 20% 98%;
+  --ring: 262.1 83.3% 57.8%;
+  --sidebar-primary: 262.1 83.3% 57.8%;
+  --sidebar-primary-foreground: 210 20% 98%;
+  --sidebar-ring: 262.1 83.3% 57.8%;
+}
+
+[data-theme="ocean"] {
+  --primary: 217 91% 60%;
+  --primary-foreground: 210 20% 98%;
+  --ring: 217 91% 60%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-primary-foreground: 210 20% 98%;
+  --sidebar-ring: 217 91% 60%;
+}
+
+[data-theme="forest"] {
+  --primary: 142 71% 45%;
+  --primary-foreground: 210 20% 98%;
+  --ring: 142 71% 45%;
+  --sidebar-primary: 142 71% 45%;
+  --sidebar-primary-foreground: 210 20% 98%;
+  --sidebar-ring: 142 71% 45%;
+}
+
+[data-theme="amber"] {
+  --primary: 38 92% 50%;
+  --primary-foreground: 20 14% 10%;
+  --ring: 38 92% 50%;
+  --sidebar-primary: 38 92% 50%;
+  --sidebar-primary-foreground: 20 14% 10%;
+  --sidebar-ring: 38 92% 50%;
+}
+
+[data-theme="rose"] {
+  --primary: 346 77% 60%;
+  --primary-foreground: 210 20% 98%;
+  --ring: 346 77% 60%;
+  --sidebar-primary: 346 77% 60%;
+  --sidebar-primary-foreground: 210 20% 98%;
+  --sidebar-ring: 346 77% 60%;
+}
+
+/* Dark mode variants */
+.dark[data-theme="default"] {
+  --primary: 263.4 70% 50.4%;
+  --ring: 263.4 70% 50.4%;
+  --sidebar-primary: 262.1 83.3% 57.8%;
+  --sidebar-ring: 262.1 83.3% 57.8%;
+}
+
+.dark[data-theme="ocean"] {
+  --primary: 217 91% 55%;
+  --ring: 217 91% 55%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-ring: 217 91% 60%;
+}
+
+.dark[data-theme="forest"] {
+  --primary: 142 71% 40%;
+  --ring: 142 71% 40%;
+  --sidebar-primary: 142 71% 45%;
+  --sidebar-ring: 142 71% 45%;
+}
+
+.dark[data-theme="amber"] {
+  --primary: 38 92% 45%;
+  --primary-foreground: 20 14% 10%;
+  --ring: 38 92% 45%;
+  --sidebar-primary: 38 92% 50%;
+  --sidebar-primary-foreground: 20 14% 10%;
+  --sidebar-ring: 38 92% 50%;
+}
+
+.dark[data-theme="rose"] {
+  --primary: 346 77% 55%;
+  --ring: 346 77% 55%;
+  --sidebar-primary: 346 77% 60%;
+  --sidebar-ring: 346 77% 60%;
+}

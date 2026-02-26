@@ -6,10 +6,12 @@ import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import { authApi } from '@/lib/api/client';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/i18n/i18n.context';
 
 export default function RegisterPage() {
   const router = useRouter();
   const { setAuth } = useAuthStore();
+  const { t } = useI18n();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +27,7 @@ export default function RegisterPage() {
       setAuth(data);
       router.push('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || '회원가입에 실패했습니다. 다시 시도해주세요.');
+      setError(err.response?.data?.message || t('auth.register.errorDefault'));
     } finally {
       setIsLoading(false);
     }
@@ -219,12 +221,11 @@ export default function RegisterPage() {
             </div>
             <div className="brand-center">
               <h1 className="brand-headline">
-                Your knowledge,<br />
-                <em>amplified.</em>
+                {t('auth.brand.registerHeadline1')}<br />
+                <em>{t('auth.brand.registerHeadline2')}</em>
               </h1>
               <p className="brand-description">
-                지금 바로 시작하세요. 문서를 올리고, AI와 대화하고,
-                아이디어를 체계적으로 관리하는 나만의 공간.
+                {t('auth.brand.registerDescription')}
               </p>
             </div>
             <div className="brand-footer">© 2026 Lumen</div>
@@ -232,18 +233,18 @@ export default function RegisterPage() {
 
           <div className="form-panel">
             <div className="form-container">
-              <p className="form-eyebrow">Get started</p>
-              <h2 className="form-title">회원가입</h2>
-              <p className="form-subtitle">Lumen으로 나만의 지식 허브를 만들어보세요.</p>
+              <p className="form-eyebrow">{t('auth.register.eyebrow')}</p>
+              <h2 className="form-title">{t('auth.register.title')}</h2>
+              <p className="form-subtitle">{t('auth.register.subtitle')}</p>
 
               <form onSubmit={handleRegister}>
                 <div className="field-group">
                   <div className="field">
-                    <label className="field-label">이름</label>
+                    <label className="field-label">{t('auth.register.name')}</label>
                     <input
                       className="field-input"
                       type="text"
-                      placeholder="홍길동"
+                      placeholder={t('auth.register.namePlaceholder')}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
@@ -251,22 +252,22 @@ export default function RegisterPage() {
                     />
                   </div>
                   <div className="field">
-                    <label className="field-label">이메일</label>
+                    <label className="field-label">{t('auth.register.email')}</label>
                     <input
                       className="field-input"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder={t('auth.register.emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className="field">
-                    <label className="field-label">비밀번호</label>
+                    <label className="field-label">{t('auth.register.password')}</label>
                     <input
                       className="field-input"
                       type="password"
-                      placeholder="8자 이상"
+                      placeholder={t('auth.register.passwordPlaceholder')}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -281,16 +282,17 @@ export default function RegisterPage() {
                   {isLoading ? (
                     <>
                       <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
-                      가입 중...
+                      {t('auth.register.loading')}
                     </>
                   ) : (
-                    '계정 만들기'
+                    t('auth.register.submit')
                   )}
                 </button>
               </form>
 
               <div className="form-footer">
-                이미 계정이 있으신가요? <Link href="/login">로그인</Link>
+                {t('auth.register.hasAccount')}{' '}
+                <Link href="/login">{t('auth.register.login')}</Link>
               </div>
             </div>
           </div>

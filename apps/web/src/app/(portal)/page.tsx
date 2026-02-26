@@ -1,21 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import { CheckSquare, FileText, Sparkles, Loader2, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { tasksApi, notesApi, aiApi } from '@/lib/api/client';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/i18n/i18n.context';
+import { getDateLocale } from '@/i18n/dateLocale';
 import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
+  const { t, locale } = useI18n();
   const today = new Date();
-  const dateStr = format(today, 'yyyy.MM.dd (EEE)', { locale: ko });
+  const dateStr = format(today, 'yyyy.MM.dd (EEE)', { locale: getDateLocale(locale) });
 
   const { data: todayTasks = [] } = useQuery({
     queryKey: ['tasks', 'today'],
@@ -44,12 +46,19 @@ export default function DashboardPage() {
       tasksApi.update(id, { status }),
   });
 
+  const quickLinks = [
+    { href: '/knowledge', label: t('dashboard.knowledge'), icon: '🧠', desc: t('dashboard.knowledgeDesc') },
+    { href: '/tasks', label: t('dashboard.tasks'), icon: '✅', desc: t('dashboard.tasksDesc') },
+    { href: '/calendar', label: t('dashboard.calendar'), icon: '📅', desc: t('dashboard.calendarDesc') },
+    { href: '/bookmarks', label: t('dashboard.bookmarks'), icon: '🔖', desc: t('dashboard.bookmarksDesc') },
+  ];
+
   return (
     <div className="space-y-6">
       {/* 헤더 */}
       <div>
         <h1 className="text-2xl font-bold">
-          안녕하세요, {user?.name}님 👋
+          {t('dashboard.greeting', { name: user?.name ?? '' })}
         </h1>
         <p className="text-muted-foreground">{dateStr}</p>
       </div>
@@ -61,7 +70,7 @@ export default function DashboardPage() {
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <CheckSquare className="h-4 w-4 text-primary" />
-              오늘 할일
+              {t('dashboard.todayTasks')}
               <Badge variant="secondary" className="ml-auto">
                 {todayTasks.filter((t: any) => t.status !== 'DONE').length}
               </Badge>
@@ -69,7 +78,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             {todayTasks.length === 0 ? (
-              <p className="text-sm text-muted-foreground">오늘 마감 태스크가 없습니다.</p>
+              <p className="text-sm text-muted-foreground">{t('dashboard.noTodayTasks')}</p>
             ) : (
               todayTasks.slice(0, 5).map((task: any) => (
                 <div key={task.id} className="flex items-center gap-2">
@@ -96,7 +105,7 @@ export default function DashboardPage() {
             )}
             <Link href="/tasks">
               <Button variant="ghost" size="sm" className="mt-2 w-full text-xs">
-                전체 보기 →
+                {t('common.viewAll')}
               </Button>
             </Link>
           </CardContent>
@@ -107,12 +116,12 @@ export default function DashboardPage() {
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <FileText className="h-4 w-4 text-primary" />
-              최근 노트
+              {t('dashboard.recentNotes')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {recentNotes.length === 0 ? (
-              <p className="text-sm text-muted-foreground">아직 노트가 없습니다.</p>
+              <p className="text-sm text-muted-foreground">{t('dashboard.noNotes')}</p>
             ) : (
               recentNotes.slice(0, 5).map((note: any) => (
                 <Link
@@ -122,14 +131,14 @@ export default function DashboardPage() {
                 >
                   <p className="text-sm font-medium truncate">{note.title}</p>
                   <p className="text-xs text-muted-foreground truncate">
-                    {note.content?.slice(0, 60) || '내용 없음'}
+                    {note.content?.slice(0, 60) || t('notes.noContent')}
                   </p>
                 </Link>
               ))
             )}
             <Link href="/notes">
               <Button variant="ghost" size="sm" className="mt-2 w-full text-xs">
-                전체 보기 →
+                {t('common.viewAll')}
               </Button>
             </Link>
           </CardContent>
@@ -140,7 +149,7 @@ export default function DashboardPage() {
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Sparkles className="h-4 w-4 text-primary" />
-              AI Daily Briefing
+              {t('dashboard.briefingTitle')}
               <Button
                 variant="ghost"
                 size="icon"
@@ -160,13 +169,13 @@ export default function DashboardPage() {
             {isLoadingBriefing ? (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                브리핑 생성 중...
+                {t('dashboard.briefingLoading')}
               </div>
             ) : briefing ? (
               <p className="text-sm leading-relaxed">{briefing.briefingText}</p>
             ) : (
               <p className="text-sm text-muted-foreground">
-                브리핑을 생성하려면 클릭하세요.
+                {t('dashboard.briefingEmpty')}
               </p>
             )}
           </CardContent>
@@ -175,12 +184,7 @@ export default function DashboardPage() {
 
       {/* 빠른 링크 */}
       <div className="grid gap-4 md:grid-cols-4">
-        {[
-          { href: '/knowledge', label: '지식 베이스', icon: '🧠', desc: '노트북 & AI 채팅' },
-          { href: '/tasks', label: '태스크', icon: '✅', desc: '할일 관리' },
-          { href: '/calendar', label: '캘린더', icon: '📅', desc: '일정 관리' },
-          { href: '/bookmarks', label: '북마크', icon: '🔖', desc: 'URL 저장 & AI 요약' },
-        ].map(({ href, label, icon, desc }) => (
+        {quickLinks.map(({ href, label, icon, desc }) => (
           <Link key={href} href={href}>
             <Card className="cursor-pointer hover:border-primary/50 transition-colors">
               <CardContent className="flex items-center gap-3 p-4">

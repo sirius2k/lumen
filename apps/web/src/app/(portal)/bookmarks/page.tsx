@@ -8,9 +8,11 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { bookmarksApi } from '@/lib/api/client';
+import { useI18n } from '@/i18n/i18n.context';
 
 export default function BookmarksPage() {
   const queryClient = useQueryClient();
+  const { t } = useI18n();
   const [newUrl, setNewUrl] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [filterUnread, setFilterUnread] = useState(false);
@@ -50,11 +52,11 @@ export default function BookmarksPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Bookmark className="h-6 w-6 text-primary" />
-          북마크
+          {t('bookmarks.title')}
         </h1>
         <Button onClick={() => setIsAdding(true)} className="gap-2">
           <Plus className="h-4 w-4" />
-          URL 추가
+          {t('bookmarks.addUrl')}
         </Button>
       </div>
 
@@ -65,14 +67,14 @@ export default function BookmarksPage() {
           size="sm"
           onClick={() => setFilterUnread(false)}
         >
-          전체
+          {t('bookmarks.filterAll')}
         </Button>
         <Button
           variant={filterUnread ? 'default' : 'outline'}
           size="sm"
           onClick={() => setFilterUnread(true)}
         >
-          미읽음
+          {t('bookmarks.filterUnread')}
         </Button>
       </div>
 
@@ -81,7 +83,7 @@ export default function BookmarksPage() {
         <Card className="border-primary/50">
           <CardContent className="flex items-center gap-3 pt-4 pb-4">
             <Input
-              placeholder="https://..."
+              placeholder={t('bookmarks.urlPlaceholder')}
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAddBookmark()}
@@ -95,13 +97,15 @@ export default function BookmarksPage() {
               {createBookmark.isPending ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  AI 요약 중...
+                  {t('bookmarks.aiSummarizing')}
                 </>
               ) : (
-                '추가'
+                t('bookmarks.add')
               )}
             </Button>
-            <Button variant="ghost" onClick={() => setIsAdding(false)}>취소</Button>
+            <Button variant="ghost" onClick={() => setIsAdding(false)}>
+              {t('bookmarks.cancel')}
+            </Button>
           </CardContent>
         </Card>
       )}
@@ -110,8 +114,8 @@ export default function BookmarksPage() {
       {bookmarks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center text-muted-foreground">
           <Bookmark className="h-12 w-12 mb-4 opacity-50" />
-          <p className="font-medium">저장된 북마크가 없습니다</p>
-          <p className="text-sm mt-1">URL을 추가하면 AI가 자동으로 요약해드립니다</p>
+          <p className="font-medium">{t('bookmarks.empty')}</p>
+          <p className="text-sm mt-1">{t('bookmarks.emptyHint')}</p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -177,7 +181,7 @@ export default function BookmarksPage() {
                     }
                     className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {bookmark.isRead ? '읽음 ✓' : '미읽음'}
+                    {bookmark.isRead ? t('bookmarks.markRead') : t('bookmarks.markUnread')}
                   </button>
                 </div>
               </CardContent>

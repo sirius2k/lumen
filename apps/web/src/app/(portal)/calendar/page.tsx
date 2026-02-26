@@ -14,14 +14,16 @@ import {
   addMonths,
   subMonths,
 } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, Plus, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { calendarApi } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
+import { useI18n } from '@/i18n/i18n.context';
+import { getDateLocale } from '@/i18n/dateLocale';
 
 export default function CalendarPage() {
   const queryClient = useQueryClient();
+  const { t, tArray, locale } = useI18n();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -77,14 +79,20 @@ export default function CalendarPage() {
   const getEventsForDay = (date: Date) =>
     events.filter((e: any) => isSameDay(new Date(e.startAt), date));
 
-  const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekDays = tArray('calendar.weekDays');
+  const dateLocale = getDateLocale(locale);
+  const monthHeader = format(
+    currentDate,
+    locale === 'ko' ? 'yyyy년 M월' : 'MMMM yyyy',
+    { locale: dateLocale },
+  );
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Calendar className="h-6 w-6 text-primary" />
-          캘린더
+          {t('calendar.title')}
         </h1>
       </div>
 
@@ -93,8 +101,8 @@ export default function CalendarPage() {
         <Button variant="outline" size="icon" onClick={() => setCurrentDate(subMonths(currentDate, 1))}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-lg font-semibold min-w-[140px] text-center">
-          {format(currentDate, 'yyyy년 M월', { locale: ko })}
+        <h2 className="text-lg font-semibold min-w-[160px] text-center">
+          {monthHeader}
         </h2>
         <Button variant="outline" size="icon" onClick={() => setCurrentDate(addMonths(currentDate, 1))}>
           <ChevronRight className="h-4 w-4" />
@@ -104,7 +112,7 @@ export default function CalendarPage() {
           size="sm"
           onClick={() => setCurrentDate(new Date())}
         >
-          오늘
+          {t('calendar.today')}
         </Button>
       </div>
 
@@ -170,7 +178,7 @@ export default function CalendarPage() {
                   ))}
                   {dayEvents.length > 2 && (
                     <div className="text-[10px] text-muted-foreground pl-1">
-                      +{dayEvents.length - 2}개
+                      {t('calendar.moreEvents', { count: dayEvents.length - 2 })}
                     </div>
                   )}
                 </div>
@@ -185,11 +193,17 @@ export default function CalendarPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-background rounded-lg p-6 w-full max-w-sm shadow-lg">
             <h3 className="font-semibold mb-4">
-              {format(selectedDate, 'M월 d일 (EEE)', { locale: ko })} 일정 추가
+              {t('calendar.addEventTitle', {
+                date: format(
+                  selectedDate,
+                  locale === 'ko' ? 'M월 d일 (EEE)' : 'MMM d (EEE)',
+                  { locale: dateLocale },
+                ),
+              })}
             </h3>
             <input
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 mb-4"
-              placeholder="이벤트 제목..."
+              placeholder={t('calendar.eventPlaceholder')}
               value={newEventTitle}
               onChange={(e) => setNewEventTitle(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleCreateEvent()}
@@ -203,10 +217,10 @@ export default function CalendarPage() {
                   setNewEventTitle('');
                 }}
               >
-                취소
+                {t('calendar.cancel')}
               </Button>
               <Button onClick={handleCreateEvent} disabled={!newEventTitle.trim()}>
-                추가
+                {t('calendar.add')}
               </Button>
             </div>
           </div>

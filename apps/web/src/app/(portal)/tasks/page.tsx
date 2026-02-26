@@ -10,12 +10,14 @@ import { Badge } from '@/components/ui/badge';
 import { tasksApi, projectsApi } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { useI18n } from '@/i18n/i18n.context';
+import { getDateLocale } from '@/i18n/dateLocale';
 
 type FilterType = 'ALL' | 'TODAY' | 'TODO' | 'DONE';
 
 export default function TasksPage() {
   const queryClient = useQueryClient();
+  const { t, locale } = useI18n();
   const [filter, setFilter] = useState<FilterType>('ALL');
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [selectedProjectId, setSelectedProjectId] = useState<string | undefined>();
@@ -69,10 +71,10 @@ export default function TasksPage() {
   };
 
   const filters: { value: FilterType; label: string }[] = [
-    { value: 'ALL', label: '전체' },
-    { value: 'TODAY', label: '오늘' },
-    { value: 'TODO', label: '할일' },
-    { value: 'DONE', label: '완료' },
+    { value: 'ALL', label: t('tasks.filterAll') },
+    { value: 'TODAY', label: t('tasks.filterToday') },
+    { value: 'TODO', label: t('tasks.filterTodo') },
+    { value: 'DONE', label: t('tasks.filterDone') },
   ];
 
   // 프로젝트별 그룹화
@@ -88,7 +90,7 @@ export default function TasksPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <CheckSquare className="h-6 w-6 text-primary" />
-          태스크
+          {t('tasks.title')}
         </h1>
       </div>
 
@@ -111,7 +113,7 @@ export default function TasksPage() {
         <CardContent className="flex items-center gap-3 pt-4 pb-4">
           <Plus className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           <Input
-            placeholder="새 태스크 추가..."
+            placeholder={t('tasks.addPlaceholder')}
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleCreateTask()}
@@ -123,7 +125,7 @@ export default function TasksPage() {
               onChange={(e) => setSelectedProjectId(e.target.value || undefined)}
               className="text-xs border border-input rounded px-2 py-1 bg-background"
             >
-              <option value="">프로젝트 없음</option>
+              <option value="">{t('tasks.noProject')}</option>
               {projects.map((p: any) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -132,7 +134,7 @@ export default function TasksPage() {
             </select>
           )}
           <Button size="sm" onClick={handleCreateTask} disabled={!newTaskTitle.trim()}>
-            추가
+            {t('tasks.addButton')}
           </Button>
         </CardContent>
       </Card>
@@ -141,8 +143,8 @@ export default function TasksPage() {
       {tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center text-muted-foreground">
           <CheckSquare className="h-12 w-12 mb-4 opacity-50" />
-          <p className="font-medium">태스크가 없습니다</p>
-          <p className="text-sm mt-1">위에서 새 태스크를 추가해보세요</p>
+          <p className="font-medium">{t('tasks.empty')}</p>
+          <p className="text-sm mt-1">{t('tasks.emptyHint')}</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -184,13 +186,13 @@ export default function TasksPage() {
                         </p>
                         {task.dueDate && (
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            ~{format(new Date(task.dueDate), 'MM/dd (EEE)', { locale: ko })}
+                            ~{format(new Date(task.dueDate), 'MM/dd (EEE)', { locale: getDateLocale(locale) })}
                           </p>
                         )}
                       </div>
 
                       {task.status === 'IN_PROGRESS' && (
-                        <Badge variant="secondary" className="text-xs">진행중</Badge>
+                        <Badge variant="secondary" className="text-xs">{t('tasks.inProgress')}</Badge>
                       )}
 
                       <button

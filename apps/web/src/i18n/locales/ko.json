@@ -1,0 +1,181 @@
+{
+  "common": {
+    "add": "추가",
+    "save": "저장",
+    "cancel": "취소",
+    "create": "만들기",
+    "delete": "삭제",
+    "open": "열기",
+    "search": "검색",
+    "viewAll": "전체 보기 →",
+    "loading": "로딩 중...",
+    "noContent": "내용 없음"
+  },
+  "sidebar": {
+    "home": "홈",
+    "knowledge": "지식",
+    "notes": "노트",
+    "tasks": "태스크",
+    "calendar": "캘린더",
+    "bookmarks": "북마크",
+    "settings": "설정",
+    "logout": "로그아웃"
+  },
+  "topbar": {
+    "searchPlaceholder": "전체 검색...",
+    "askAI": "AI에게 물어보기",
+    "quickCapture": "빠른 캡처"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어",
+    "theme": "테마",
+    "darkMode": "다크 모드",
+    "themes": {
+      "default": "기본",
+      "ocean": "오션",
+      "forest": "포레스트",
+      "amber": "앰버",
+      "rose": "로즈"
+    }
+  },
+  "dashboard": {
+    "greeting": "안녕하세요, {name}님 👋",
+    "todayTasks": "오늘 할일",
+    "noTodayTasks": "오늘 마감 태스크가 없습니다.",
+    "recentNotes": "최근 노트",
+    "noNotes": "아직 노트가 없습니다.",
+    "briefingTitle": "AI Daily Briefing",
+    "briefingLoading": "브리핑 생성 중...",
+    "briefingEmpty": "브리핑을 생성하려면 클릭하세요.",
+    "knowledge": "지식 베이스",
+    "knowledgeDesc": "노트북 & AI 채팅",
+    "tasks": "태스크",
+    "tasksDesc": "할일 관리",
+    "calendar": "캘린더",
+    "calendarDesc": "일정 관리",
+    "bookmarks": "북마크",
+    "bookmarksDesc": "URL 저장 & AI 요약"
+  },
+  "tasks": {
+    "title": "태스크",
+    "filterAll": "전체",
+    "filterToday": "오늘",
+    "filterTodo": "할일",
+    "filterDone": "완료",
+    "addPlaceholder": "새 태스크 추가...",
+    "noProject": "프로젝트 없음",
+    "addButton": "추가",
+    "empty": "태스크가 없습니다",
+    "emptyHint": "위에서 새 태스크를 추가해보세요",
+    "inProgress": "진행중"
+  },
+  "notes": {
+    "title": "노트",
+    "newNote": "새 노트",
+    "empty": "노트가 없습니다",
+    "titlePlaceholder": "노트 제목...",
+    "contentPlaceholder": "마크다운으로 작성하세요...",
+    "selectHint": "노트를 선택하거나 새로 만드세요",
+    "noContent": "내용 없음"
+  },
+  "calendar": {
+    "title": "캘린더",
+    "today": "오늘",
+    "weekDays": ["일", "월", "화", "수", "목", "금", "토"],
+    "moreEvents": "+{count}개",
+    "addEventTitle": "{date} 일정 추가",
+    "eventPlaceholder": "이벤트 제목...",
+    "cancel": "취소",
+    "add": "추가"
+  },
+  "bookmarks": {
+    "title": "북마크",
+    "addUrl": "URL 추가",
+    "filterAll": "전체",
+    "filterUnread": "미읽음",
+    "urlPlaceholder": "https://...",
+    "aiSummarizing": "AI 요약 중...",
+    "add": "추가",
+    "cancel": "취소",
+    "empty": "저장된 북마크가 없습니다",
+    "emptyHint": "URL을 추가하면 AI가 자동으로 요약해드립니다",
+    "markRead": "읽음 ✓",
+    "markUnread": "미읽음"
+  },
+  "knowledge": {
+    "title": "지식 베이스",
+    "subtitle": "문서를 업로드하고 AI와 대화하세요",
+    "newNotebook": "새 노트북",
+    "notebookPlaceholder": "노트북 제목...",
+    "create": "만들기",
+    "cancel": "취소",
+    "empty": "노트북이 없습니다",
+    "emptyHint": "첫 번째 노트북을 만들어 문서를 분석해보세요",
+    "createFirst": "새 노트북 만들기",
+    "sources": "{count}개 소스",
+    "open": "열기 →",
+    "uploadFile": "파일 업로드 (PDF/TXT)",
+    "addUrl": "URL 추가",
+    "urlPlaceholder": "URL 입력...",
+    "sourcesCount": "소스 ({count})",
+    "statusReady": "완료",
+    "statusProcessing": "처리중",
+    "statusError": "오류",
+    "statusPending": "대기",
+    "aiChat": "AI 채팅",
+    "aiChatDesc": "소스 문서를 기반으로 질문하세요",
+    "chatEmpty": "소스를 추가하고 AI에게 질문하세요",
+    "chatEmptyHint": "PDF, 웹페이지 등을 업로드하면 AI가 분석합니다",
+    "chatPlaceholder": "소스에 대해 질문하세요...",
+    "references": "참조 출처"
+  },
+  "auth": {
+    "login": {
+      "eyebrow": "Welcome back",
+      "title": "로그인",
+      "subtitle": "계속하려면 이메일과 비밀번호를 입력하세요.",
+      "email": "이메일",
+      "emailPlaceholder": "you@example.com",
+      "password": "비밀번호",
+      "passwordPlaceholder": "비밀번호를 입력하세요",
+      "submit": "로그인",
+      "loading": "로그인 중...",
+      "noAccount": "계정이 없으신가요?",
+      "register": "회원가입",
+      "devDivider": "개발 환경",
+      "devLogin": "⚡ 개발 계정으로 바로 로그인",
+      "errorDefault": "이메일 또는 비밀번호를 확인해주세요."
+    },
+    "register": {
+      "eyebrow": "Get started",
+      "title": "회원가입",
+      "subtitle": "Lumen으로 나만의 지식 허브를 만들어보세요.",
+      "name": "이름",
+      "namePlaceholder": "홍길동",
+      "email": "이메일",
+      "emailPlaceholder": "you@example.com",
+      "password": "비밀번호",
+      "passwordPlaceholder": "8자 이상",
+      "submit": "계정 만들기",
+      "loading": "가입 중...",
+      "hasAccount": "이미 계정이 있으신가요?",
+      "login": "로그인",
+      "errorDefault": "회원가입에 실패했습니다. 다시 시도해주세요."
+    },
+    "brand": {
+      "loginHeadline1": "Think deeper.",
+      "loginHeadline2": "Know better.",
+      "loginDescription": "문서와 아이디어를 연결하고, AI와 함께 통찰을 발견하는 나만의 지식 허브.",
+      "loginFeatures": [
+        "RAG 기반 AI 채팅 — 문서 속 답을 바로",
+        "노트, 태스크, 캘린더 한 곳에",
+        "북마크 AI 자동 요약",
+        "Daily Briefing으로 하루 시작"
+      ],
+      "registerHeadline1": "Your knowledge,",
+      "registerHeadline2": "amplified.",
+      "registerDescription": "지금 바로 시작하세요. 문서를 올리고, AI와 대화하고, 아이디어를 체계적으로 관리하는 나만의 공간."
+    }
+  }
+}

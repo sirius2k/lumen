@@ -1,4 +1,17 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x /Users/kypark/Develop/ClaudeCode/lumen/start.sh)",
+      "Read(//tmp/gcp-api-test/.claude/**)",
+      "Read(//private/tmp/gcp-api-test/.claude/**)",
+      "Read(//private/tmp/gcp-api-test/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/kypark/Develop/ClaudeCode/lumen/.claude",
+      "/Users/kypark/Develop/ClaudeCode/lumen/.claude/skills",
+      "/private/tmp/gcp-api-test/.claude/skills/doc-sync-translation"
+    ]
+  },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true
   }

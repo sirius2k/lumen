@@ -18,9 +18,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
 import { notebooksApi, sourcesApi, chatApi } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
+import { useI18n } from '@/i18n/i18n.context';
 
 interface Message {
   id: string;
@@ -33,6 +33,7 @@ export default function NotebookWorkspacePage() {
   const params = useParams();
   const notebookId = params.id as string;
   const queryClient = useQueryClient();
+  const { t } = useI18n();
 
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -167,16 +168,21 @@ export default function NotebookWorkspacePage() {
     }
   };
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'READY': return t('knowledge.statusReady');
+      case 'PROCESSING': return t('knowledge.statusProcessing');
+      case 'ERROR': return t('knowledge.statusError');
+      default: return t('knowledge.statusPending');
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'READY':
-        return 'bg-green-500/20 text-green-400';
-      case 'PROCESSING':
-        return 'bg-yellow-500/20 text-yellow-400';
-      case 'ERROR':
-        return 'bg-red-500/20 text-red-400';
-      default:
-        return 'bg-gray-500/20 text-gray-400';
+      case 'READY': return 'bg-green-500/20 text-green-400';
+      case 'PROCESSING': return 'bg-yellow-500/20 text-yellow-400';
+      case 'ERROR': return 'bg-red-500/20 text-red-400';
+      default: return 'bg-gray-500/20 text-gray-400';
     }
   };
 
@@ -216,13 +222,13 @@ export default function NotebookWorkspacePage() {
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload className="h-3.5 w-3.5" />
-            파일 업로드 (PDF/TXT)
+            {t('knowledge.uploadFile')}
           </Button>
 
           {showUrlInput ? (
             <div className="flex gap-1">
               <Input
-                placeholder="URL 입력..."
+                placeholder={t('knowledge.urlPlaceholder')}
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 onKeyDown={(e) =>
@@ -252,14 +258,14 @@ export default function NotebookWorkspacePage() {
               onClick={() => setShowUrlInput(true)}
             >
               <LinkIcon className="h-3.5 w-3.5" />
-              URL 추가
+              {t('knowledge.addUrl')}
             </Button>
           )}
         </div>
 
         <ScrollArea className="flex-1 p-3">
           <p className="text-xs font-medium text-muted-foreground mb-2">
-            소스 ({notebook?.sources?.length || 0})
+            {t('knowledge.sourcesCount', { count: notebook?.sources?.length || 0 })}
           </p>
           <div className="space-y-2">
             {notebook?.sources?.map((source: any) => (
@@ -277,13 +283,7 @@ export default function NotebookWorkspacePage() {
                     getStatusColor(source.status),
                   )}
                 >
-                  {source.status === 'READY'
-                    ? '완료'
-                    : source.status === 'PROCESSING'
-                      ? '처리중'
-                      : source.status === 'ERROR'
-                        ? '오류'
-                        : '대기'}
+                  {getStatusLabel(source.status)}
                 </span>
                 <button
                   onClick={() => deleteSource.mutate(source.id)}
@@ -300,9 +300,9 @@ export default function NotebookWorkspacePage() {
       {/* 채팅 패널 (중) */}
       <div className="flex flex-1 flex-col">
         <div className="border-b p-4">
-          <h3 className="font-semibold text-sm">AI 채팅</h3>
+          <h3 className="font-semibold text-sm">{t('knowledge.aiChat')}</h3>
           <p className="text-xs text-muted-foreground">
-            소스 문서를 기반으로 질문하세요
+            {t('knowledge.aiChatDesc')}
           </p>
         </div>
 
@@ -310,8 +310,8 @@ export default function NotebookWorkspacePage() {
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full py-16 text-center text-muted-foreground">
               <p className="text-4xl mb-4">💬</p>
-              <p className="font-medium">소스를 추가하고 AI에게 질문하세요</p>
-              <p className="text-sm mt-1">PDF, 웹페이지 등을 업로드하면 AI가 분석합니다</p>
+              <p className="font-medium">{t('knowledge.chatEmpty')}</p>
+              <p className="text-sm mt-1">{t('knowledge.chatEmptyHint')}</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -334,7 +334,9 @@ export default function NotebookWorkspacePage() {
                     <p className="whitespace-pre-wrap">{msg.content}</p>
                     {msg.citations && msg.citations.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-border/40 space-y-1">
-                        <p className="text-[10px] font-medium text-muted-foreground">참조 출처</p>
+                        <p className="text-[10px] font-medium text-muted-foreground">
+                          {t('knowledge.references')}
+                        </p>
                         {msg.citations.map((c, i) => (
                           <div
                             key={i}
@@ -364,7 +366,7 @@ export default function NotebookWorkspacePage() {
         <div className="border-t p-4">
           <div className="flex gap-2">
             <Input
-              placeholder="소스에 대해 질문하세요..."
+              placeholder={t('knowledge.chatPlaceholder')}
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
